@@ -10,13 +10,18 @@ def index():
 
 @app.route('/process', methods=['POST'])
 def process():
+    response = ''
+    
     session['guess'] = request.form['guess']
+    guess = session['guess']
+    
+    if guess == '':
+        response = 'Please enter a number'
+        print response
+        return redirect('/')
     guess = int(session['guess'])
     print guess
     print theNumber
-    
-    session['response'] = ''
-    response = session['response']
     
     if guess > theNumber:
         response = 'Too High!'
