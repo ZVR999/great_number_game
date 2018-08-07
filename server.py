@@ -8,32 +8,42 @@ app.secret_key = 'asc14$@en?aijpnnwfwf3*^%$ac'
 def index():
     return render_template('index.html')
 
+@app.route('/reset', methods=['POST'])
+def reset():
+    session['res'] = ''
+    theNumber = random.randint(0,101)
+    return redirect('/')
+
 @app.route('/process', methods=['POST'])
 def process():
-    response = ''
-    
+    session['res'] = ''
+    session['response'] = ''
     session['guess'] = request.form['guess']
-    guess = session['guess']
-    
-    if guess == '':
-        response = 'Please enter a number'
-        print response
+    session['num'] = str(theNumber)
+    session['theNumber'] = int(theNumber)
+
+    if session['guess'] == '':
+        session['response'] = 'Please enter a number'
+        print session['response']
         return redirect('/')
-    guess = int(session['guess'])
-    print guess
+    session['guess'] = int(session['guess'])
     print theNumber
     
-    if guess > theNumber:
-        response = 'Too High!'
-        print response
+    if session['guess'] > theNumber:
+        session['response'] = 'Too High!'
+        print session['response']
+        session['res'] = '<div class="response">Too High!</div>'
         return redirect('/')
-    elif guess < theNumber:
-        response = 'Too Low!'
-        print response
+    elif session['guess'] < theNumber:
+        session['response'] = 'Too Low!'
+        session['res'] = '<div class="response">Too Low!</div>'
+        print session['response']
         return redirect('/')
-    elif guess == theNumber:
-        response = str(theNumber)+' was the number!'
-        print response
+    elif session['guess'] == theNumber:
+        session['response'] = session['num']+' was the number!'
+        session['res'] = '<div class="correct">'+session['response']+'</div>'
+        session['res'] += '<form action="" method="POST"> <button type="submit">Play Again?</button></form>'  
+        print session['response']
         return redirect('/')
 
 app.run(debug=True)

@@ -12,9 +12,13 @@
 <body>
     <h1>Welcome to the Great Number Game!</h1>
     <p>I am thinking of a number between 1 and 100
-        <br> Take a guess!</p>
+        <br> Take a guess!</p> 
     <form action="/process" method="POST">
         <input type="number" name="guess">
+        <br>
+        {% if session['response'] == 'Too High!' or 'Too Low!' %}
+            {{session['res']|safe}}
+        {% endif %}
         <br>
         <button type="submit">Submit</button>
     </form>
